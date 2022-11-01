@@ -18,5 +18,4 @@ func (choiceRepository) GetById(int) (*Choice, error) {
 
 func NewChoiceRepository(db *sqlx.DB) ChoiceRepository {
 	return choiceRepository{db: db}
-
 }
