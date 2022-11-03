@@ -1,7 +1,7 @@
 package repository
 
 type Question struct {
-	Id    int    `db:"id"`
+	ID    int    `db:"id"`
 	Title string `db:"title"`
 }
 
