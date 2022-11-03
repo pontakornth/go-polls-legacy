@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gorilla/mux"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
 	"github.com/pontakornth/go-polls/handlers"
@@ -36,9 +37,11 @@ func main() {
 	questionRepo, choiceRepo := repository.NewQuestionRepository(db), repository.NewChoiceRepository(db)
 	pollsService := services.NewPollsService(questionRepo, choiceRepo)
 	pollsHandler := handlers.NewPollsHandler(pollsService)
-	http.HandleFunc("/", handle)
-	http.HandleFunc("/polls", pollsHandler.GetAllQuestions)
-	log.Fatal(http.ListenAndServe(":8000", nil))
+	router := mux.NewRouter()
+	router.HandleFunc("/", handle)
+	router.HandleFunc("/polls", pollsHandler.GetAllQuestions)
+	router.HandleFunc("/polls/{id:[0-9]+}", pollsHandler.GetQuestionById)
+	log.Fatal(http.ListenAndServe(":8000", router))
 }
 
 func initTimezone() {
