@@ -7,8 +7,13 @@ type questionRepositoryDb struct {
 }
 
 // GetAll implements QuestionRepository
-func (questionRepositoryDb) GetAll() ([]Question, error) {
-	panic("unimplemented")
+func (repo questionRepositoryDb) GetAll() ([]Question, error) {
+	questions := []Question{}
+	err := repo.db.Select(&questions, "SELECT * FROM questions")
+	if err != nil {
+		return nil, err
+	}
+	return questions, err
 }
 
 // GetById implements QuestionRepository

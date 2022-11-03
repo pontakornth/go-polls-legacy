@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -10,6 +9,10 @@ import (
 	"time"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
+	"github.com/jmoiron/sqlx"
+	"github.com/pontakornth/go-polls/handlers"
+	"github.com/pontakornth/go-polls/repository"
+	"github.com/pontakornth/go-polls/services"
 
 	"github.com/spf13/viper"
 )
@@ -22,7 +25,7 @@ func main() {
 	initTimezone()
 	initConfig()
 	connection := fmt.Sprintf("postgres://%v:%v@%v:%v/%v", viper.GetString("db.username"), viper.GetString("db.password"), viper.GetString("db.host"), viper.GetString("db.port"), viper.GetString("db.database"))
-	db, err := sql.Open("pgx", connection)
+	db, err := sqlx.Open("pgx", connection)
 	if err != nil {
 		panic(err)
 	}
@@ -30,7 +33,11 @@ func main() {
 		panic(err)
 	}
 	log.Println("Connected to the database")
+	questionRepo, choiceRepo := repository.NewQuestionRepository(db), repository.NewChoiceRepository(db)
+	pollsService := services.NewPollsService(questionRepo, choiceRepo)
+	pollsHandler := handlers.NewPollsHandler(pollsService)
 	http.HandleFunc("/", handle)
+	http.HandleFunc("/polls", pollsHandler.GetAllQuestions)
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
 
