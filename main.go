@@ -1,11 +1,15 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
 	"time"
+
+	_ "github.com/jackc/pgx/v5/stdlib"
 
 	"github.com/spf13/viper"
 )
@@ -17,6 +21,15 @@ func handle(w http.ResponseWriter, r *http.Request) {
 func main() {
 	initTimezone()
 	initConfig()
+	connection := fmt.Sprintf("postgres://%v:%v@%v:%v/%v", viper.GetString("db.username"), viper.GetString("db.password"), viper.GetString("db.host"), viper.GetString("db.port"), viper.GetString("db.database"))
+	db, err := sql.Open("pgx", connection)
+	if err != nil {
+		panic(err)
+	}
+	if err = db.Ping(); err != nil {
+		panic(err)
+	}
+	log.Println("Connected to the database")
 	http.HandleFunc("/", handle)
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
