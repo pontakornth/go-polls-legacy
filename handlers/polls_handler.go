@@ -3,7 +3,9 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/pontakornth/go-polls/services"
 )
 
@@ -28,5 +30,14 @@ func (p pollsHandler) GetAllQuestions(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p pollsHandler) GetQuestionById(w http.ResponseWriter, r *http.Request) {
-	// TODO: Implement
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
+	question, err := p.pollService.GetQuestionById(id)
+	w.Header().Add("Content-Type", "application/json")
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+		return
+	}
+	json.NewEncoder(w).Encode(question)
 }

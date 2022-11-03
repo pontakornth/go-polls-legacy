@@ -7,8 +7,13 @@ type choiceRepository struct {
 }
 
 // GetAllChoiceFromQuestion implements ChoiceRepository
-func (choiceRepository) GetAllChoiceFromQuestion(Question) ([]Choice, error) {
-	panic("unimplemented")
+func (c choiceRepository) GetAllChoiceFromQuestion(q Question) ([]Choice, error) {
+	choices := []Choice{}
+	err := c.db.Select(&choices, "SELECT * FROM choices c WHERE c.question_id = $1", q.ID)
+	if err != nil {
+		return nil, err
+	}
+	return choices, err
 }
 
 // GetById implements ChoiceRepository
