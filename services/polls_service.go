@@ -24,8 +24,28 @@ func (polls pollsService) GetAllQuestions() ([]QuestionListResponse, error) {
 }
 
 // GetQuestionById implements PollsService
-func (pollsService) GetQuestionById(int) (*QuestionDetailResponse, error) {
-	panic("unimplemented")
+func (polls pollsService) GetQuestionById(ID int) (*QuestionDetailResponse, error) {
+	question, err := polls.questionRepo.GetById(ID)
+	if err != nil {
+		return nil, err
+	}
+	choices, err := polls.choiceRepo.GetAllChoiceFromQuestion(*question)
+	if err != nil {
+		return nil, err
+	}
+	detailedQuestion := &QuestionDetailResponse{
+		ID:      ID,
+		Title:   question.Title,
+		Choices: []ChoiceResponse{},
+	}
+	for _, c := range choices {
+		detailedQuestion.Choices = append(detailedQuestion.Choices, ChoiceResponse{
+			ID:         c.ID,
+			ChoiceText: c.ChoiceText,
+			Votes:      c.Votes,
+		})
+	}
+	return detailedQuestion, nil
 }
 
 // VoteChoice implements PollsService
