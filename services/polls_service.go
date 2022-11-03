@@ -8,8 +8,19 @@ type pollsService struct {
 }
 
 // GetAllQuestions implements PollsService
-func (pollsService) GetAllQuestions() ([]QuestionListResponse, error) {
-	panic("unimplemented")
+func (polls pollsService) GetAllQuestions() ([]QuestionListResponse, error) {
+	questions, err := polls.questionRepo.GetAll()
+	if err != nil {
+		return nil, err
+	}
+	resQuestions := []QuestionListResponse{}
+	for _, v := range questions {
+		resQuestions = append(resQuestions, QuestionListResponse{
+			ID:    v.ID,
+			Title: v.Title,
+		})
+	}
+	return resQuestions, nil
 }
 
 // GetQuestionById implements PollsService

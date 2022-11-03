@@ -13,18 +13,29 @@ var (
 	mockQuestion repository.QuestionRepository
 )
 
-func TestPollsService(t *testing.T) {
-	t.Run("Get one question", func(t *testing.T) {
-		polls := services.NewPollsService(mockQuestion, mockChoice)
-		question, err := polls.GetQuestionById(1)
-		if err != nil {
-			t.Error(err)
-			return
-		}
-		if question.ID != 1 {
-			t.Error("Incorrect question returned")
-		}
-	})
+func TestGetOneQuestion(t *testing.T) {
+	polls := services.NewPollsService(mockQuestion, mockChoice)
+	question, err := polls.GetQuestionById(1)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	if question.ID != 1 {
+		t.Error("Incorrect question returned")
+	}
+}
+
+func TestGetAllQuestions(t *testing.T) {
+
+	polls := services.NewPollsService(mockQuestion, mockChoice)
+	questions, err := polls.GetAllQuestions()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	if l := len(questions); l != 3 {
+		t.Errorf("Wrong number of questions, expect 3 got %v", l)
+	}
 }
 
 func TestMain(m *testing.M) {
