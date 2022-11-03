@@ -33,17 +33,17 @@ func NewChoiceRepositoryMock() ChoiceRepository {
 	repo := choiceRepositoryMock{
 		choices: []Choice{
 			// Question 1
-			{ID: 1, ChoiceText: "Red", Votes: 0},
-			{ID: 2, ChoiceText: "Green", Votes: 0},
-			{ID: 3, ChoiceText: "Blue", Votes: 0},
+			{ID: 1, ChoiceText: "Red", QuestionID: 1, Votes: 0},
+			{ID: 2, ChoiceText: "Green", QuestionID: 1, Votes: 0},
+			{ID: 3, ChoiceText: "Blue", QuestionID: 1, Votes: 0},
 			// Question 2
-			{ID: 4, ChoiceText: "Genshin Impact", Votes: 0},
-			{ID: 5, ChoiceText: "Honkai Impact", Votes: 0},
-			{ID: 6, ChoiceText: "Blue Archive", Votes: 0},
+			{ID: 4, ChoiceText: "Genshin Impact", QuestionID: 2, Votes: 0},
+			{ID: 5, ChoiceText: "Honkai Impact", QuestionID: 2, Votes: 0},
+			{ID: 6, ChoiceText: "Blue Archive", QuestionID: 2, Votes: 0},
 			// Question 3
-			{ID: 7, ChoiceText: "Amogus", Votes: 0},
-			{ID: 8, ChoiceText: "Impostor", Votes: 0},
-			{ID: 9, ChoiceText: "Impossible", Votes: 0},
+			{ID: 7, ChoiceText: "Amogus", QuestionID: 3, Votes: 0},
+			{ID: 8, ChoiceText: "Impostor", QuestionID: 3, Votes: 0},
+			{ID: 9, ChoiceText: "Impossible", QuestionID: 3, Votes: 0},
 		},
 	}
 	return repo
