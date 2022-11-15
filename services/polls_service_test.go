@@ -38,6 +38,17 @@ func TestGetAllQuestions(t *testing.T) {
 	}
 }
 
+func TestVoteChoiceById(t *testing.T) {
+	polls := services.NewPollsService(mockQuestion, mockChoice)
+	choice, err := polls.VoteChoiceById(1)
+	if err != nil {
+		t.Errorf("Error %v", err)
+	}
+	if choice.Votes != 1 {
+		t.Errorf("Wrong number of votes, expect 1 got %v", choice.Votes)
+	}
+}
+
 func TestMain(m *testing.M) {
 
 	mockChoice = repository.NewChoiceRepositoryMock()

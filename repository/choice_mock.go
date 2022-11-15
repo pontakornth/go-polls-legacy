@@ -6,6 +6,17 @@ type choiceRepositoryMock struct {
 	choices []Choice
 }
 
+// AddVote implements ChoiceRepository
+func (c choiceRepositoryMock) AddVote(ID int) (*Choice, error) {
+	for _, choice := range c.choices {
+		if choice.ID == ID {
+			choice.Votes++
+			return &choice, nil
+		}
+	}
+	return nil, errors.New("Choice not found")
+}
+
 // GetAllChoiceFromQuestion implements ChoiceRepository
 func (c choiceRepositoryMock) GetAllChoiceFromQuestion(q Question) ([]Choice, error) {
 	if q.ID == 1 {

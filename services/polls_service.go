@@ -49,8 +49,17 @@ func (polls pollsService) GetQuestionById(ID int) (*QuestionDetailResponse, erro
 }
 
 // VoteChoice implements PollsService
-func (pollsService) VoteChoice(int) (*ChoiceResponse, error) {
-	panic("unimplemented")
+func (polls pollsService) VoteChoiceById(choiceId int) (*ChoiceResponse, error) {
+	choice, err := polls.choiceRepo.AddVote(choiceId)
+	if err != nil {
+		return nil, err
+	}
+	choiceResponse := &ChoiceResponse{
+		ID:         choiceId,
+		ChoiceText: choice.ChoiceText,
+		Votes:      choice.Votes,
+	}
+	return choiceResponse, nil
 }
 
 func NewPollsService(questionRepo repository.QuestionRepository, choiceRepo repository.ChoiceRepository) PollsService {

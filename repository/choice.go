@@ -10,4 +10,5 @@ type Choice struct {
 type ChoiceRepository interface {
 	GetAllChoiceFromQuestion(Question) ([]Choice, error)
 	GetById(int) (*Choice, error)
+	AddVote(int) (*Choice, error)
 }

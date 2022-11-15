@@ -20,5 +20,5 @@ type QuestionDetailResponse struct {
 type PollsService interface {
 	GetAllQuestions() ([]QuestionListResponse, error)
 	GetQuestionById(int) (*QuestionDetailResponse, error)
-	VoteChoice(int) (*ChoiceResponse, error)
+	VoteChoiceById(int) (*ChoiceResponse, error)
 }
